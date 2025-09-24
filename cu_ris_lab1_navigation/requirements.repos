@@ -1,0 +1,9 @@
+repositories:
+  flatland:
+    type: git
+    url: https://github.com/constructor-robotics/flatland.git
+    version: master
+  turtlebot_flatland:
+    type: git
+    url: https://github.com/constructor-robotics/turtlebot_flatland.git
+    version: master
