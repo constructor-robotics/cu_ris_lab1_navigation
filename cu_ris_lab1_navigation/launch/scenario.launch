@@ -1,0 +1,32 @@
+<launch>
+  <arg name="initial_pose_x" default="2.5"/>
+  <arg name="initial_pose_y" default="15.0"/>
+  <arg name="initial_pose_a" default="$(eval tau/4)"/>
+
+  <param name="use_sim_time" value="true"/>
+
+  <!-- flatland simulator -->
+  <node name="flatland_server" pkg="flatland_server" type="flatland_server" output="screen">
+    <param name="world_path" value="$(find turtlebot_flatland)/maps/hospital_section.world.yaml" />
+    <param name="update_rate" value="100.0" />
+    <param name="step_size" value="0.01" />
+    <param name="show_viz" value="true" />
+    <param name="viz_pub_rate" value="30" />
+  </node>
+  <!-- spawn robot in flatland  -->
+  <node name="spawn_model" pkg="rosservice" type="rosservice"
+    args="call --wait /spawn_model &quot;{
+      yaml_path: '$(dirname)/../config/flatland/turtlebot.model.yaml',
+      name: 'turtlebot',
+      ns: '',
+      pose: {x: $(arg initial_pose_x), y: $(arg initial_pose_y), theta: $(arg initial_pose_a)}}&quot;"
+    />
+
+  <!-- robot description independent of simulator for illustration -->
+  <param name="robot_description" command="xacro '$(find turtlebot_description)/robots/kobuki_hexagons_kinect.urdf.xacro'"/>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+  <!-- prepared rviz config -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/exploration.rviz" />
+</launch>
