@@ -3,6 +3,8 @@
   <arg name="initial_pose_y" default="15.0"/>
   <arg name="initial_pose_a" default="$(eval tau/4)"/>
 
+  <arg name="rviz" default="true"/>
+
   <param name="use_sim_time" value="true"/>
 
   <!-- flatland simulator -->
@@ -24,9 +26,9 @@
 
   <!-- robot description independent of simulator for illustration -->
   <param name="robot_description" command="xacro '$(find turtlebot_description)/robots/kobuki_hexagons_kinect.urdf.xacro'"/>
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
 
   <!-- prepared rviz config -->
-  <node name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/exploration.rviz" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(dirname)/../config/exploration.rviz" if="$(arg rviz)"/>
 </launch>
